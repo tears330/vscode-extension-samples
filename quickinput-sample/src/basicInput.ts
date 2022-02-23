@@ -3,18 +3,25 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { window } from 'vscode';
+import { ThemeColor, ThemeIcon, window } from 'vscode';
 
 /**
  * Shows a pick list using window.showQuickPick().
  */
 export async function showQuickPick() {
 	let i = 0;
-	const result = await window.showQuickPick(['eins', 'zwei', 'drei'], {
-		placeHolder: 'eins, zwei or drei',
-		onDidSelectItem: item => window.showInformationMessage(`Focus ${++i}: ${item}`)
-	});
-	window.showInformationMessage(`Got: ${result}`);
+	const quickPick = window.createQuickPick();
+	quickPick.title = '123123';
+	quickPick.items = new Array(10).fill('').map((_, i) => ({
+		label: `Item ${i}`,
+		buttons: [
+			{
+				iconPath: new ThemeIcon('remote-explorer-documentation'),
+				tooltip: '查看文档',
+			},
+		],
+	}));
+	quickPick.show();
 }
 
 /**
@@ -25,10 +32,10 @@ export async function showInputBox() {
 		value: 'abcdef',
 		valueSelection: [2, 4],
 		placeHolder: 'For example: fedcba. But not: 123',
-		validateInput: text => {
+		validateInput: (text) => {
 			window.showInformationMessage(`Validating: ${text}`);
 			return text === '123' ? 'Not 123!' : null;
-		}
+		},
 	});
 	window.showInformationMessage(`Got: ${result}`);
 }
